@@ -10,3 +10,10 @@ Frontend de um pequeno sistema de agenda desenvolvido utilizando VueJS que conso
 
 # Ferramentas utilizadas
 - Visual Studio Code
+
+# Como buildar o projeto
+- Instale o NodeJS e NPM (https://nodejs.org/en/)
+- Clone o repositório -> git clone https://github.com/leonardongl/agenda-vuejs.git
+- Entre na pasta do projeto -> cd agenda-vuejs
+- Instale as dependências via NPM -> npm install
+- Para iniciar a aplicação frontend -> npm run dev
