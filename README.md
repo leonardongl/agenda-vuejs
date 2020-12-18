@@ -1,21 +1,12 @@
-# agenda-front
+# Agenda Frontend
+Frontend de um pequeno sistema de agenda desenvolvido utilizando VueJS que consome uma API desenvolvida em Spring Boot. Trata-se da prova para seleção ao cargo de Desenvolvedor no Instituto Creathus.
 
-> A Vue.js project
+# Tecnologias Utilizadas
+- Javascript
+- Node 15.4.0
+- NPM 7.0.15
+- VueJS 2
+- Vue CLI
 
-## Build Setup
-
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+# Ferramentas utilizadas
+- Visual Studio Code
