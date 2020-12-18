@@ -4,12 +4,13 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="modalExcluirLabel">Excluir Contato</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeModalExcluir">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-
+            <h6>Deseja realmente excluir esse contato?</h6>
+            {{ contato.nome }}
         </div>
         <div class="modal-footer">
           <button @click="excluir()" type="button" class="btn btn-sm btn-danger"><i class="fas fa-eraser"></i> Excluir</button>
@@ -23,13 +24,37 @@
 <script>
 export default {
   name: 'ModalExcluir',
+  props: {
+    contatoSelecionado: { type: Object, default: null }
+  },
+  data() {
+    return {
+      contato: {
+        id: null,
+        nome: null,
+        email: null,
+        telefone: null,
+        sexo: null
+      }
+    }
+  },
+  watch: {
+    contatoSelecionado() {
+      this.contato = this.contatoSelecionado
+    }
+  },
   methods: {
-    async excluir() {
-      await axios.put(`excluir/{$id}`, {})
+    excluir() {
+      axios.delete(`http://localhost:8080/contatos/${this.contato.id}`, {})
       .then(novoContato => {
-        this.$emit('excluir', {})
+        document.getElementById('closeModalExcluir').click()
+        this.$emit('excluir')
+        this.$toast.success('Contato excluído com sucesso.', 'Sucesso!')
       })
-      .catch(console.log('Erro'))
+      .catch(error => {
+        console.log(error.response)
+        this.$toast.error('Erro ao excluir o contato.', 'Erro!')
+      })
     }
   },
 }

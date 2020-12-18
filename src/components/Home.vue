@@ -1,11 +1,12 @@
 <template>
   <div>
     <modal-form :contatoSelecionado="contatoSelecionado" @cadastrar="adicionarContato" @editar="editarContato"></modal-form>
-    <modal-excluir @excluir="excluirContato"></modal-excluir>
+    <modal-excluir :contatoSelecionado="contatoSelecionado" @excluir="excluirContato"></modal-excluir>
 
     <div class="container">
       <h3 class="text-center mt-5 mb-3">Agenda de Contatos</h3>
-      <div class="table-responsive">
+      <button @click="limparContato()" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalForm"><i class="fas fa-plus"></i> Novo Contato</button>
+      <div class="table-responsive mt-3">
         <table class="table table-striped table-bordered">
           <thead>
             <tr>
@@ -23,7 +24,9 @@
               <td>{{ contato.nome }}</td>
               <td class="text-center">{{ contato.email }}</td>
               <td class="text-center">{{ contato.telefone }}</td>
-              <td class="text-center">{{ contato.sexo }}</td>
+              <td v-if="contato.sexo=='M'" class="text-center">Masculino</td>
+              <td v-else-if="contato.sexo=='F'" class="text-center">Feminino</td>
+              <td v-else class="text-center">N/A</td>
               <td class="text-center">
                 <button @click="selecionarContato(index)" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalForm">
                   <i class="fas fa-edit"></i> Editar
@@ -36,7 +39,6 @@
           </tbody>
         </table>
       </div>
-      <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalForm"><i class="fas fa-plus"></i> Novo Contato</button>
     </div>
   </div>
 </template>
@@ -44,6 +46,7 @@
 <script>
 import ModalForm from './ModalForm'
 import ModalExcluir from './ModalExcluir'
+import axios from 'axios'
 
 export default {
   name: 'Home',
@@ -53,6 +56,7 @@ export default {
   },
   data() {
     return {
+      index: null,
       contatoSelecionado: {
           id: null,
           nome: null,
@@ -60,37 +64,46 @@ export default {
           telefone: null,
           sexo: null
       },
-      contatos: [
-        {
-          id: '1',
-          nome: 'Leonardo',
-          email: 'leonardongl@gmail.com',
-          telefone: '(92) 98814-6884',
-          sexo: 'M'
-        },
-        {
-          id: '2',
-          nome: 'Herison',
-          email: 'herison@gmail.com',
-          telefone: '(92) 98814-6884',
-          sexo: 'F'
-        }
-      ]
+      contatos: []
     }
   },
+  mounted() {
+    this.listarContatos();
+  },
   methods: {
+    listarContatos() {
+      axios.get('http://localhost:8080/contatos', {})
+        .then((response) => {
+          this.contatos = response.data
+        })
+        .catch()
+    },
+    limparContato() {
+      this.index = null
+      this.contatoSelecionado = {
+        id: null,
+        nome: null,
+        email: null,
+        telefone: null,
+        sexo: null
+      }
+    },
     selecionarContato(index) {
+      this.index = index
       this.contatoSelecionado = this.contatos[index]
     },
     adicionarContato(contato) {
       this.contatos.push(contato)
+      this.limparContato()
     },
     editarContato(contato) {
-      this.contatos.push(contato)
+      this.contatos[contatoSelecionado.id] = contato
+      this.limparContato()
     },
-    excluirContato(index) {
-      this.contatos.pop(index)
-    }
+    excluirContato() {
+      this.contatos.splice(this.index, 1)
+      this.limparContato()
+    },
   }
 }
 </script>
